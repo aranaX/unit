@@ -1,0 +1,91 @@
+\documentclass[]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+\usepackage{ulem}\normalem
+\usepackage{textcomp}
+
+\newcommand{\fondoTitulo}{%
+  \usebackgroundtemplate{\includegraphics[width=\paperwidth]{fondo}}}
+\newcommand{\fondoTexto}{%
+  \usebackgroundtemplate{\includegraphics[width=\paperwidth]{fondo}}}
+
+\definecolor{celeste}{HTML}{5E91AA}
+\definecolor{azul}{HTML}{163F54}
+
+\setbeamercolor{head1}{fg=celeste}
+\setbeamercolor{title}{fg=celeste}
+\setbeamercolor{subtitle}{fg=celeste}
+\setbeamercolor{frametitle}{fg=celeste}
+\setbeamercolor{structure}{fg=azul}
+\setbeamercolor{normal text}{fg=azul}
+
+\title{\textbf{\LARGE{Mi titulo de charla}}}
+\author[Expositor]{Expositor}
+\institute[Institución]{}
+\date[]{Fecha}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Programa}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\begin{document}
+
+\fondoTitulo
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\fondoTexto
+\section{Antecedentes}
+\begin{frame}{Titulo}
+  \begin{itemize}
+  \item Mi info
+  \end{itemize} 
+\end{frame}
+
+\begin{frame}{Mockito vs Jmock}
+  \begin{itemize}
+  \item Jmock usa un contexto para manejar los mocks
+  \item Mockito lo hace con metodos importados estáticamente
+  \end{itemize} 
+\end{frame}
+
+\begin{frame}{Mockito vs Jmock}
+  \begin{itemize}
+  \item Jmock esta diseñado para mockear interfaces, no clases
+  \item Mockito lo hace con metodos importados estáticamente
+  \item Mockito utiliza multiples mocks para la misma clase por medio de identificadores
+  \item Mockito soporta anotaciones
+  \item EL ORDEN EN MOCKITO ES IMPORTANTE/ISIMO
+  \item Verify siempre viene despues
+  \item mockito mas facil de leer
+    \item section matchers
+    \item uso de any
+    \item ambos tienen problemas combinando
+  \item numero de invocaciones
+    \item mockito usa verify
+    \item mockito no revisa si se hace una llamada no esperada
+    \item jmock tiene allowing e ignoring
+  \item call order
+  \item jmock usa sequence
+    \item mockito usa inOrder
+  \end{itemize} 
+\end{frame}
+
+
+\fondoTitulo
+\begin{frame}
+  \begin{center}
+   \LARGE ¡Gracias!   \\
+   Mi nombre
+    \texttt{mi correo} 
+    \url{mi pagina}
+  \end{center}    
+\end{frame}
+
+\end{document}
