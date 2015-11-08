@@ -62,7 +62,7 @@
 \subsection{Mockito}
 \begin{frame}
   \frametitle{Mockito}
-  Features\footnote{http://mockito.org}
+  \textbf{Features:}\footnote{http://mockito.org}
   \begin{itemize}
   \item Desarrollo continuo (push)
   \item JDK8 compatible (Defenders)
@@ -72,12 +72,22 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[c]
   \begin{itemize}
   \item \alert No es una libreria expect-run-verify
   \item Preguntar sobre interacciones despues de ejecutar
   \item Verifica solo lo que necesites (I can test what I want)
-  \item 
+  \item Stubbing va antes de la ejecucion, verificaciones de interacción después
+  \item NO EXISTEN LAS EXPECTATIONS
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mockito}
+  \begin{itemize}
+  \item Mockea clasess además de interfaces
+  \item ANNOTATIONS \o/
+  \item Stack trace limpio
   \end{itemize}
 \end{frame}
 
