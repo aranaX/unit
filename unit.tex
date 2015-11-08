@@ -20,10 +20,11 @@
 \setbeamercolor{structure}{fg=azul}
 \setbeamercolor{normal text}{fg=azul}
 
-\title{\textbf{\LARGE{Mi titulo de charla}}}
-\author[Expositor]{Expositor}
-\institute[Institución]{}
-\date[]{Fecha}
+\title[jMock->Mockito]{\textbf{\LARGE{Migrando de jMock a Mockito}}}
+\subtitle[]{Evoluciona o muere}
+\author[aranax]{Wences Arana}
+\institute[lugusac, debian-gt, guatejug]{lugusac, debian-gt, guatejug}
+\date[14/11/2015]{14 de noviembre de 2015}
 
 \AtBeginSection[]
 {
@@ -41,18 +42,37 @@
 \end{frame}
 
 \fondoTexto
-\section{Antecedentes}
-\begin{frame}{Titulo}
+\section{Frameworks}
+\subsection{jMock}
+\begin{frame}[c]
+  \frametitle{jMock}
+  Framework de pruebas unitarias
+  \pause
+  Features\footnote{http://www.jmock.org/index.html}
   \begin{itemize}
-  \item Mi info
-  \end{itemize} 
+    \item Provee una extensa libreria de mocking objects
+    \item Fácil y rápido
+    \item Librería extensea
+    \item Completamente declarativa
+    \item Fácil de extender
+  \end{itemize}
+  \transblindshorizontal
+\end{frame}
+
+\subsection{Mockito}
+\begin{frame}{Mockito}
+  \begin{itemize}
+  \item 
+  \end{itemize}
+  \transblindsvertical
 \end{frame}
 
 \begin{frame}{Mockito vs Jmock}
   \begin{itemize}
   \item Jmock usa un contexto para manejar los mocks
   \item Mockito lo hace con metodos importados estáticamente
-  \end{itemize} 
+  \end{itemize}
+  \transboxin
 \end{frame}
 
 \begin{frame}{Mockito vs Jmock}
@@ -74,8 +94,10 @@
   \item call order
   \item jmock usa sequence
     \item mockito usa inOrder
-  \end{itemize} 
+  \end{itemize}
+  \transboxout
 \end{frame}
+
 %Review state verification _after the tests have run_
 %Behavior verification _checking to see if certain methods where invoked(matchers, etc)_
 
@@ -95,14 +117,11 @@
 %http://blogs.justenougharchitecture.com/unit-testing-with-mocks-easymock-jmock-and-mockito/
 
 
-\fondoTitulo
-\begin{frame}
-  \begin{center}
-   \LARGE ¡Gracias!   \\
-   Mi nombre
-    \texttt{mi correo} 
-    \url{mi pagina}
-  \end{center}    
+%% \fondoTitulo
+\begin{frame}[c]
+   \begin{center}
+     \LARGE ¡Gracias!
+   \end{center}    
 \end{frame}
 
 \end{document}
