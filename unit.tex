@@ -46,7 +46,7 @@
 \subsection{jMock}
 \begin{frame}[c]
   \frametitle{jMock}
-  Framework de pruebas unitarias
+  Framework de pruebas unitarias \\
   \pause
   Features\footnote{http://www.jmock.org/index.html}
   \begin{itemize}
@@ -55,16 +55,30 @@
     \item Librería extensea
     \item Completamente declarativa
     \item Fácil de extender
+    \item expect-run-verify
   \end{itemize}
-  \transblindshorizontal
+\end{frame}
+%https://code.google.com/p/mockito/wiki/FeaturesAndMotivations
+\subsection{Mockito}
+\begin{frame}
+  \frametitle{Mockito}
+  Features\footnote{http://mockito.org}
+  \begin{itemize}
+  \item Desarrollo continuo (push)
+  \item JDK8 compatible (Defenders)
+  \item API limpia y simple
+  \item Fácil lectura
+  \item Bastante utilizada
+  \end{itemize}
 \end{frame}
 
-\subsection{Mockito}
-\begin{frame}{Mockito}
+\begin{frame}
   \begin{itemize}
+  \item \alert No es una libreria expect-run-verify
+  \item Preguntar sobre interacciones despues de ejecutar
+  \item Verifica solo lo que necesites (I can test what I want)
   \item 
   \end{itemize}
-  \transblindsvertical
 \end{frame}
 
 \begin{frame}{Mockito vs Jmock}
@@ -72,7 +86,6 @@
   \item Jmock usa un contexto para manejar los mocks
   \item Mockito lo hace con metodos importados estáticamente
   \end{itemize}
-  \transboxin
 \end{frame}
 
 \begin{frame}{Mockito vs Jmock}
