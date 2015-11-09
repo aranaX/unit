@@ -42,13 +42,13 @@
 \end{frame}
 
 \fondoTexto
+\transboxout
 \section{Frameworks}
 \subsection{jMock}
 \begin{frame}[c]
   \frametitle{jMock}
-  Framework de pruebas unitarias \\
+  \textbf{Features}\footnote{http://www.jmock.org/index.html}
   \pause
-  Features\footnote{http://www.jmock.org/index.html}
   \begin{itemize}
     \item Provee una extensa libreria de mocking objects
     \item Fácil y rápido
@@ -58,55 +58,54 @@
     \item expect-run-verify
   \end{itemize}
 \end{frame}
-%https://code.google.com/p/mockito/wiki/FeaturesAndMotivations
+
 \subsection{Mockito}
 \begin{frame}
   \frametitle{Mockito}
-  \textbf{Features:}\footnote{http://mockito.org}
+  \textbf{Features:}\footnote{https://code.google.com/p/mockito/wiki/FeaturesAndMotivations}
   \begin{itemize}
-  \item Desarrollo continuo (push)
-  \item JDK8 compatible (Defenders)
-  \item API limpia y simple
-  \item Fácil lectura
-  \item Bastante utilizada
+  \pause \item Desarrollo continuo (push)
+  \pause \item JDK8 compatible (Defenders)
+  \pause \item API limpia y simple
+  \pause \item Fácil lectura
+  \pause \item Bastante utilizada
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mockito}
+  \textbf{Features(continuación...)}
+  \begin{itemize}
+  \pause \item Mockea clasess además de interfaces
+  \pause \item ANNOTATIONS o/ 
+  \pause \item Stack trace limpio 
   \end{itemize}
 \end{frame}
 
 \begin{frame}[c]
+  \frametitle{Cómo funciona?}
   \begin{itemize}
-  \item \alert No es una libreria expect-run-verify
-  \item Preguntar sobre interacciones despues de ejecutar
-  \item Verifica solo lo que necesites (I can test what I want)
-  \item Stubbing va antes de la ejecucion, verificaciones de interacción después
-  \item NO EXISTEN LAS EXPECTATIONS
+  \pause \item \alert{No es una libreria expect-run-verify}
+  \pause \item \alert{NO EXISTEN LAS EXPECTATIONS}
+  \pause \item Preguntar sobre interacciones despues de ejecutar
+  \pause \item Verifica solo lo que necesites (I can test what I want)
+  \pause \item Stubbing va antes de la ejecución, verificaciones de interacción después
   \end{itemize}
 \end{frame}
 
+\section{Diferencias entre jMock y Mockito}
 \begin{frame}
-  \frametitle{Mockito}
-  \begin{itemize}
-  \item Mockea clasess además de interfaces
-  \item ANNOTATIONS \o/
-  \item Stack trace limpio
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Mockito vs Jmock}
+\frametitle{Mockito vs jMock}
   \begin{itemize}
   \item Jmock usa un contexto para manejar los mocks
   \item Mockito lo hace con metodos importados estáticamente
+  \item jMock esta diseñado para mockear interfaces, no clases
   \end{itemize}
 \end{frame}
 
 \begin{frame}{Mockito vs Jmock}
   \begin{itemize}
-  \item Jmock esta diseñado para mockear interfaces, no clases
-  \item Mockito lo hace con metodos importados estáticamente
   \item Mockito utiliza multiples mocks para la misma clase por medio de identificadores
-  \item Mockito soporta anotaciones
-  \item EL ORDEN EN MOCKITO ES IMPORTANTE/ISIMO
-  \item Verify siempre viene despues
-  \item mockito mas facil de leer
     \item section matchers
     \item uso de any
     \item ambos tienen problemas combinando
@@ -118,8 +117,12 @@
   \item jmock usa sequence
     \item mockito usa inOrder
   \end{itemize}
-  \transboxout
+
 \end{frame}
+
+%team
+
+%game
 
 %Review state verification _after the tests have run_
 %Behavior verification _checking to see if certain methods where invoked(matchers, etc)_
