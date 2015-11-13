@@ -36,6 +36,10 @@ public class Account {
         return username;
     }
 
+    public void setId(Long id){
+        this.id = id;
+    }
+
     @JsonIgnore
     public String password;
     public String username;

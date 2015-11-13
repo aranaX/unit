@@ -45,4 +45,8 @@ public class Bookmark {
     public String getDescription() {
         return description;
     }
+
+    public void setId(Long id){
+        this.id = id;
+    }
 }

@@ -2,7 +2,7 @@ package org.oms.farmacia.controllers;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-import java.util.Collection;
+import org.oms.farmacia.model.Account;
 import org.oms.farmacia.model.AccountRepository;
 import org.oms.farmacia.model.Bookmark;
 import org.oms.farmacia.model.BookmarkRepository;
@@ -18,57 +18,61 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.Collection;
 
+@Api(value = BookmarkRestController.SERVICE_ID, description = BookmarkRestController.SERVICE_DESCRIPTION)
 @RestController
-@RequestMapping("/bookmarks/{userId}/bookmarks")        
+@RequestMapping(BookmarkRestController.SERVICE_RM)
 class BookmarkRestController {
 
-    private final BookmarkRepository bookmarkRepository;
+    public static final String SERVICE_ID = "BOOKMARK";
+    public static final String SERVICE_DESCRIPTION = "BOOKMARKS API - v1";
+    public static final String SERVICE_RM = "/v1/bookmark";
 
+
+    private final BookmarkRepository bookmarkRepository;
     private final AccountRepository accountRepository;
 
+    @Autowired
+    BookmarkRestController(BookmarkRepository bookmarkRepository,
+                           AccountRepository accountRepository) {
+        this.bookmarkRepository = bookmarkRepository;
+        this.accountRepository = accountRepository;
+    }
+
+    @ApiOperation("Add bookmark to user")
     @RequestMapping(value = "/{userId}/bookmarks", method = RequestMethod.POST)
-    @ApiOperation(value = "Agrega nuevo bookmark")
     ResponseEntity<?> add(@PathVariable String userId, @RequestBody Bookmark input) {
         this.validateUser(userId);
-        return this.accountRepository
-                    .findByUsername(userId)
-                    .map(account -> {
-                        Bookmark result = bookmarkRepository.save(new Bookmark(account,
-                                            input.uri, input.description));
-                        
-                        HttpHeaders httpHeaders = new HttpHeaders();
-                        httpHeaders.setLocation(ServletUriComponentsBuilder
-                                .fromCurrentRequest().path("/{id}")
-                                .buildAndExpand(result.getId()).toUri());
-                        return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
-                    }).get();
 
-	}
+        Account account = this.accountRepository.findByUsername(userId);
 
-	@RequestMapping(value = "/{bookmarkId}", method = RequestMethod.GET)
-	Bookmark readBookmark(@PathVariable String userId, @PathVariable Long bookmarkId) {
-		this.validateUser(userId);
-		return this.bookmarkRepository.findOne(bookmarkId);
-	}
+        Bookmark result = bookmarkRepository.save(new Bookmark(account, input.uri, input.description));
 
-	@RequestMapping(method = RequestMethod.GET)
-	Collection<Bookmark> readBookmarks(@PathVariable String userId) {
-		this.validateUser(userId);
-		return this.bookmarkRepository.findByAccountUsername(userId);
-	}
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(result.getId()).toUri());
+        return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+    }
 
-	@Autowired
-	BookmarkRestController(BookmarkRepository bookmarkRepository,
-			AccountRepository accountRepository) {
-		this.bookmarkRepository = bookmarkRepository;
-		this.accountRepository = accountRepository;
-	}
+    @RequestMapping(value = "/{userId}/bookmarks/{bookmarkId}", method = RequestMethod.GET)
+    Bookmark readBookmark(@PathVariable String userId, @PathVariable Long bookmarkId) {
+        this.validateUser(userId);
+        return this.bookmarkRepository.findOne(bookmarkId);
+    }
 
-	private void validateUser(String userId) {
-		this.accountRepository.findByUsername(userId).orElseThrow(
-				() -> new UserNotFoundException(userId));
-	}
+    @RequestMapping(value="/{userId}/bookmarks", method = RequestMethod.GET)
+    Collection<Bookmark> readBookmarks(@PathVariable String userId) {
+        this.validateUser(userId);
+        return this.bookmarkRepository.findByAccountUsername(userId);
+    }
+
+
+    private void validateUser(String userId) {
+        if( this.accountRepository.findByUsername(userId) == null )
+                throw new UserNotFoundException(userId);
+    }
 }
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
