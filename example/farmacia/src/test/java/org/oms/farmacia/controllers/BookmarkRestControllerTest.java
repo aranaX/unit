@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.oms.farmacia.Application;
 import org.oms.farmacia.model.Account;
 import org.oms.farmacia.model.AccountRepository;
@@ -44,6 +45,7 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+//@RunWith(MockitoJUnitRunner.class)
 public class BookmarkRestControllerTest {
 
 
@@ -59,7 +61,6 @@ public class BookmarkRestControllerTest {
     private Account account;
 
     private List<Bookmark> bookmarkList = new ArrayList<>();
-
     @Autowired
     BookmarkRestController bookmarkRestController;
     
@@ -73,6 +74,7 @@ public class BookmarkRestControllerTest {
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
+//        bookmarkRestController = new BookmarkRestController(bookmarkRepository, accountRepository );
     }
 /*
     @Autowired
@@ -84,11 +86,6 @@ public class BookmarkRestControllerTest {
         Assert.assertNotNull("the JSON message converter must not be null",
                 this.mappingJackson2HttpMessageConverter);
     }*/
-
-    @Before
-    public void setup() throws Exception {
-        
-        }
 
     @Test(expected = UserNotFoundException.class)
     public void userNotFound() {        
