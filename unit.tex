@@ -4,6 +4,7 @@
 \usepackage{hyperref}
 \usepackage{ulem}\normalem
 \usepackage{textcomp}
+\usepackage{color}
 
 \newcommand{\fondoTitulo}{%
   \usebackgroundtemplate{\includegraphics[width=\paperwidth]{fondo}}}
@@ -12,13 +13,16 @@
 
 \definecolor{celeste}{HTML}{5E91AA}
 \definecolor{azul}{HTML}{163F54}
+\definecolor{negro}{HTML}{324085}
+
 
 \setbeamercolor{head1}{fg=celeste}
 \setbeamercolor{title}{fg=celeste}
 \setbeamercolor{subtitle}{fg=celeste}
 \setbeamercolor{frametitle}{fg=celeste}
 \setbeamercolor{structure}{fg=azul}
-\setbeamercolor{normal text}{fg=azul}
+\setbeamercolor{normal text}{fg=negro}
+\setbeamercolor{verbatim}{fg=negro}
 
 \title[jMock->Mockito]{\textbf{\LARGE{Migrando de jMock a Mockito}}}
 \subtitle[]{Evoluciona o muere}
@@ -34,6 +38,18 @@
   \end{frame}
 }
 
+\AtBeginSubsection[]
+{
+  \begin{frame}
+    \frametitle{Programa}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+\makeatletter
+\def\verbatim{\tiny\@verbatim \frenchspacing\@vobeyspaces \@xverbatim}
+\makeatother
+
 \begin{document}
 
 \fondoTitulo
@@ -47,15 +63,15 @@
 \subsection{jMock}
 \begin{frame}[c]
   \frametitle{jMock}
-  \textbf{Features}\footnote{http://www.jmock.org/index.html}
+  \textbf{Features:}\footnote{http://www.jmock.org/index.html}
   \pause
   \begin{itemize}
-    \item Provee una extensa libreria de mocking objects
-    \item Fácil y rápido
-    \item Librería extensea
-    \item Completamente declarativa
-    \item Fácil de extender
-    \item expect-run-verify
+    \pause \item Provee una extensa librería de mocking objects
+    \pause \item Fácil y rápido
+    \pause \item Librería extensa
+    \pause \item Completamente declarativa
+    \pause \item Fácil de extender
+    \pause \item expect-run-verify
   \end{itemize}
 \end{frame}
 
@@ -83,9 +99,9 @@
 \end{frame}
 
 \begin{frame}[c]
-  \frametitle{Cómo funciona?}
+  \frametitle{Funcionamiento}
   \begin{itemize}
-  \pause \item \alert{No es una libreria expect-run-verify}
+  \pause \item \alert{No es una librería expect-run-verify}
   \pause \item \alert{NO EXISTEN LAS EXPECTATIONS}
   \pause \item Preguntar sobre interacciones despues de ejecutar
   \pause \item Verifica solo lo que necesites (I can test what I want)
@@ -94,30 +110,287 @@
 \end{frame}
 
 \section{Diferencias entre jMock y Mockito}
+\subsection{Creando mocks}
 \begin{frame}
 \frametitle{Mockito vs jMock}
   \begin{itemize}
-  \item Jmock usa un contexto para manejar los mocks
-  \item Mockito lo hace con metodos importados estáticamente
+  \item jMock usa un contexto para manejar los mocks
+  \item mockito lo hace con metodos importados estáticamente
   \item jMock esta diseñado para mockear interfaces, no clases
+  \item mockito puede mockear clases
+  \item mockito soporta anotaciones
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Mockito vs Jmock}
+\begin{frame}[fragile]
+\frametitle{Mockito vs jMock}\footnote{http://zsoltfabok.com/blog/2010/08/jmock-versus-mockito/}
+\textbf{jMock}
+\begin{verbatim}
+import org.jmock.Mockery;
+import org.junit.Test;
+
+public class PosTerminalTest {
+    @Test
+    public void shouldPrintSuccessfulWithdrawal() {
+        Mockery context = new Mockery();
+
+        BankConnection bankConnection = context.mock(BankConnection.class);
+        ReceiptPrinter receiptPrinter = context.mock(ReceiptPrinter.class);
+        // the test case continues...
+    }
+}  
+\end{verbatim}
+\textbf{Mockito}
+\begin{verbatim}{
+import static org.mockito.Mockito.mock;
+import org.junit.Test;
+
+public class PosTerminalTest {
+    @Test
+    public void shouldPrintSuccessfulWithdrawal() {
+        BankConnection bankConnection = mock(BankConnection.class);
+        ReceiptPrinter receiptPrinter = mock(ReceiptPrinter.class);
+        // the test case continues...
+   }
+}
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\textbf{Mockito(continuación ...)}
+\begin{verbatim}
+import org.mockito.Mock;
+// Other import statements ...
+
+@RunWith(MockitoJUnitRunner.class)
+public class PosTerminalTest {
+    @Mock
+    private BankConnection bankConnection;
+    @Mock
+    private ReceiptPrinter receiptPrinter;
+    @Mock
+    private Account customerAccount;
+    @Mock
+    private Account shopAccount;
+
+    @Test
+    public void shouldPrintSuccessfulWithdrawal() {
+    }
+\end{verbatim}
+\end{frame}
+
+\subsection{Verificación de llamadas y valores de retorno}
+\begin{frame}
   \begin{itemize}
-  \item Mockito utiliza multiples mocks para la misma clase por medio de identificadores
-    \item section matchers
-    \item uso de any
-    \item ambos tienen problemas combinando
-  \item numero de invocaciones
     \item mockito usa verify
     \item mockito no revisa si se hace una llamada no esperada
-    \item jmock tiene allowing e ignoring
-  \item call order
-  \item jmock usa sequence
-    \item mockito usa inOrder
+    \item jMock tiene allowing e ignoring
   \end{itemize}
+\end{frame}
 
+\begin{frame}[fragile]
+\textbf{jMock}
+\begin{verbatim}
+@Test
+    public void shouldPrintSuccessfulWithdrawal() {
+        PosTerminal posTerminal = new PosTerminal(bankConnection, receiptPrinter);
+
+        context.checking(new Expectations() { {
+            oneOf(bankConnection).getAccountByCardNumber("1000-0000-0001-0003");
+            will(returnValue(customerAccount));
+
+            // Other oneOf() will() statements ...
+
+            oneOf(receiptPrinter).print("Successful withdrawal");
+        } });
+
+        posTerminal.buyWithCard(100, "1000-0000-0001-0003");
+    }
+\end{verbatim}
+\textbf{mockito}
+\begin{verbatim}
+@Test
+    public void shouldPrintSuccessfulWithdrawal() {
+        PosTerminal posTerminal = new PosTerminal(bankConnection, receiptPrinter);
+
+        when(bankConnection.getAccountByCardNumber("1000-0000-0001-0003"))
+            .thenReturn(customerAccount);
+
+        // Other when(...).thenReturn(...) calls ...
+
+        posTerminal.buyWithCard(100, "1000-0000-0001-0003");
+
+        verify(receiptPrinter).print("Successful withdrawal");
+    }
+\end{verbatim}
+\end{frame}
+
+\subsection{Argument matchers}
+\begin{frame}
+  \begin{itemize}
+    \item Uso de any
+    \item Ambos tienen problemas combinando
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\textbf{jMock}
+\begin{verbatim}
+context.checking(new Expectations() { {
+            // Other oneOf() will() statements ...
+
+            oneOf(customerAccount).withdraw(with(any(Integer.class)),
+                    with(any(String.class)));
+            will(returnValue(true));
+
+            oneOf(shopAccount).enter(with(100), with(any(String.class)));
+            will(returnValue(true));
+
+           // Other oneOf() will() statements ...
+        } });
+\end{verbatim}
+\textbf{mockito}
+\begin{verbatim}
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+// Other parts of the code ...
+    @Test
+    public void shouldPrintSuccessfulWithdrawal() {
+       // Other when(...).thenReturn(...) calls ...
+
+        when(customerAccount.withdraw(anyInt(), anyString())).thenReturn(true);
+        when(shopAccount.enter(eq(100), anyString())).thenReturn(true);
+
+        // Other when(...).thenReturn(...)  and verify(...) calls ...
+    }
+\end{verbatim}  
+\end{frame}
+
+\subsection{Number of invocations}
+\begin{frame}[fragile]
+\textbf{jMock}
+\begin{verbatim}
+context.checking(new Expectations() { {
+           // Other oneOf() will() statements ...
+            exactly(1).of(receiptPrinter).print(with(any(String.class)));
+        } });
+or
+context.checking(new Expectations() { {
+           // Other oneOf() will() statements ...
+            atLeast(1).of(receiptPrinter).print(with(any(String.class)));
+        } });
+or
+context.checking(new Expectations() { {
+           // Other oneOf() will() statements ...
+            never(receiptPrinter).print(with(any(String.class)));
+        } });
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\textbf{mockito}
+\begin{verbatim}
+// Other when(...).thenReturn(...) calls ...
+        verify(receiptPrinter, times(1)).print(anyString());
+        // Other verify() calls ...
+or
+// Other when(...).thenReturn(...) calls ...
+        verify(receiptPrinter, atLeast(1)).print(anyString());
+        // Other verify() calls ...
+or
+// Other when(...).thenReturn(...) calls ...
+        verify(receiptPrinter, never()).print(anyString());
+        // Other verify() calls ...
+\end{verbatim}
+\end{frame}
+
+\subsection{Llamadas consecutivas}
+\begin{frame}[fragile]
+\textbf{jMock}
+\begin{verbatim}
+context.checking(new Expectations() { {
+            // Other oneOf() will() statements ...
+
+            oneOf(shopAccount).enter(with(100), with(any(String.class)));
+            will(onConsecutiveCalls(returnValue(true), returnValue(false),
+                 returnValue(false)));
+        } });
+\end{verbatim}
+\textbf{mockito}
+\begin{verbatim}
+// Other when(...).thenReturn(...) calls ...
+        when(shopAccount.enter(eq(100), anyString())).thenReturn(true, false, false);
+\end{verbatim}
+\end{frame}
+
+\subsection{Verificación de orden de llamadas}
+\begin{frame}{Mockito vs Jmock}
+  \begin{itemize}
+  \item jMock usa sequence
+  \item mockito usa inOrder
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\textbf{jMock}
+\begin{verbatim}
+@Test
+    public void shouldPrintSuccessfulWithdrawal() {
+        PosTerminal posTerminal = new PosTerminal(bankConnection, receiptPrinter);
+
+        final Sequence sequence = context.sequence("account order");
+        context.checking(new Expectations() { {
+            // Other oneOf() will() statements ...
+
+            oneOf(customerAccount).withdraw(with(any(Integer.class)),
+                    with(any(String.class)));
+            will(returnValue(true));
+            inSequence(sequence);
+
+            atLeast(1).of(shopAccount).enter(with(100), with(any(String.class)));
+            will(returnValue(true));
+            inSequence(sequence);
+        } });
+
+        posTerminal.buyWithCard(100, "1000-0000-0001-0003");
+    }
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \textbf{mockito}
+\begin{verbatim}
+@Test
+    public void shouldPrintSuccessfulWithdrawal() {
+        PosTerminal posTerminal = new PosTerminal(bankConnection, receiptPrinter);
+
+        posTerminal.buyWithCard(100, "1000-0000-0001-0003");
+
+        InOrder inOrder = Mockito.inOrder(customerAccount, shopAccount);
+        inOrder.verify(customerAccount).withdraw(anyInt(), anyString());
+        inOrder.verify(shopAccount).enter(anyInt(), anyString());
+
+        verify(receiptPrinter).print(anyString());
+    }
+\end{verbatim}
+\end{frame}
+
+\subsection{Manejo de excepciones}
+\begin{frame}[fragile]
+\textbf{jMock}
+\begin{verbatim}
+context.checking(new Expectations() { {
+            oneOf(bankConnection).getAccountByCardNumber("1000-0000-0001-0003");
+            will(throwException(new RuntimeException()));
+         } });
+\end{verbatim}
+\textbf{mockito}
+\begin{verbatim}
+when(bankConnection.getAccountByCardNumber("1000-0000-0001-0003"))
+          .thenThrow(new RuntimeException());
+\end{verbatim}
 \end{frame}
 
 %team
@@ -144,6 +417,12 @@
 
 
 %% \fondoTitulo
+\begin{frame}[c]
+   \begin{center}
+     \LARGE DEMO
+   \end{center}    
+\end{frame}
+
 \begin{frame}[c]
    \begin{center}
      \LARGE ¡Gracias!
