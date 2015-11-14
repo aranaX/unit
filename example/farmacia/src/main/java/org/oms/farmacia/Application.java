@@ -1,6 +1,5 @@
 package org.oms.farmacia;
 
-import org.oms.farmacia.conf.SwaggerConfiguration;
 import org.oms.farmacia.model.Account;
 import org.oms.farmacia.model.AccountRepository;
 import org.oms.farmacia.model.Bookmark;
@@ -22,7 +21,6 @@ import java.util.Arrays;
 @EnableAutoConfiguration
 @ComponentScan
 @SpringBootApplication
-@Import(SwaggerConfiguration.class)
 public class Application {
 
     @Bean
